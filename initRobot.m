@@ -1,4 +1,7 @@
 function [s, theta0, theta1, x, y] = initRobot(port)
+	
+	% Code for Octave/MATLAB compatibility
+
 	octave = isOctave();
 	if(~octave)
 		delete(instrfindall);
@@ -6,9 +9,11 @@ function [s, theta0, theta1, x, y] = initRobot(port)
 		pkg load instrument-control
 	endif
 	
-	s = serial(port, 115200);
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+	s = serial(port, 115200);
 	fopen(s);
+
 	theta0 = 0;
 	theta1 = 0;
 	x = 320;
