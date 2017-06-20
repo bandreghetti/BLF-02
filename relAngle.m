@@ -1,7 +1,8 @@
-function newRobot = relAngle(robot, theta0, theta1, omega0 = 10, omega1 = 10, updateflag = true, comm = true)
+function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 = 10, updateflag = true, comm = true)
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	% robot: the list containing the robot current status and serial address
+	% serial: serial port that connects to the robot
+	% robot: the list containing the robot current status
 	% theta0: the relative angle that the first motor will move (in degrees)
 	% theta1: the relative angle that the second motor will move (in degrees)
 	% omega0: the speed at which the first motor will execute the move (in degrees per second)
@@ -10,40 +11,41 @@ function newRobot = relAngle(robot, theta0, theta1, omega0 = 10, omega1 = 10, up
 	% comm: if set to False, the function will only print the command string instead of sending it to the controller board. Defaults to True.
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 	% Code to validate the command before sending it to the controller board.
 	% This is to ensure that no dangerous commands are sent to the robot.
 
-	newTheta0 = robot(2) + theta0;
-	newTheta1 = robot(3) + theta1;
+	newTheta0 = robot(1) + theta0;
+	newTheta1 = robot(2) + theta1;
 	newX = 160 + 80*cos(newTheta0) + 80*cos(newTheta0 + newTheta1);
 	newY = 80*sin(newTheta0) + 80*sin(newTheta0 + newTheta1);
 	newRobot = robot;
 
 	validCommand = true;
 
-	if(newTheta0 < 0 || newTheta0 > 180)
-		disp('ERROR: Destination angle for first motor out of limits.')
-		validCommand = false;
-	endif
+	if(updateflag)
+		if(newTheta0 < 0 || newTheta0 > 180)
+			disp('ERROR: Destination angle for first motor out of limits.')
+			validCommand = false;
+		endif
 
-	if(newTheta1 < -180 || newTheta1 > 180)
-		disp('ERROR: Destination angle for second motor out of limits.')
-		validCommand = false;
-	endif
+		if(newTheta1 < -180 || newTheta1 > 180)
+			disp('ERROR: Destination angle for second motor out of limits.')
+			validCommand = false;
+		endif
 
-	if(omega0 < 0 || omega1 < 0)
-		disp('ERROR: No negative speed values are allowed.')
-		validCommand = false;
+		if(omega0 < 0 || omega1 < 0)
+			disp('ERROR: No negative speed values are allowed.')
+			validCommand = false;
+		endif
 	endif
 
 	% Code to check the direction of the movement
 	if(validCommand)
 		if(theta0 < 0)
-			neg0 = 1;
+			neg0 = 0;
 			theta0 = abs(theta0);
 		else
-			dir0 = 0;
+			dir0 = 1;
 		endif
 
 		if(theta1 < 0)
@@ -75,7 +77,7 @@ function newRobot = relAngle(robot, theta0, theta1, omega0 = 10, omega1 = 10, up
 		% Code to update the robot current coordinates
 
 		if(updateflag)
-			newRobot = [robot(1), newTheta0, newTheta1, newX, newY];
+			newRobot = [newTheta0, newTheta1, newX, newY];
 		endif
 		
 		% Code to format the command message
@@ -86,18 +88,18 @@ function newRobot = relAngle(robot, theta0, theta1, omega0 = 10, omega1 = 10, up
 
 		if(comm)
 			if(isOctave())
-				srl_write(robot(1), message);
+				srl_write(serial, message);
 			else
-				fprintf(robot(1), message)
+				fprintf(serial, message)
 			endif
 
 			% Code to wait for the controller board response
 
 			begin = time();
-			data = srl_read(robot(1), 1);
+			data = srl_read(serial, 1);
 
 			while(data ~= '\n' || time() - begin < 20)
-				data = srl_read(robot(1), 1);
+				data = srl_read(serial, 1);
 			endwhile
 		else
 			disp(message)
