@@ -21,18 +21,15 @@ void loop() {
 	String data = getCommand();
 	
 	if(isDigit(data[0])) {
-		switch(data[0]) {
-			case 'a':
-			  translateData(data, n_steps, stepTime, dir);
-			  moveSteppers(n_steps, stepTime, dir);
-			  respondMaster();
-			  break;
-		}
+    translateData(data, n_steps, stepTime, dir);
+    moveSteppers(n_steps, stepTime, dir);
+    respondMaster();
+	} else {
+   
 	}
 }
 
 String getCommand() {
-	// Cxxxxxyyyzzzzzwww\n
 	if(Serial.available() > 0) {
 		String data = Serial.readString();
 		Serial.println(data);
@@ -62,21 +59,11 @@ void moveSteppers(int n_steps[2], long int stepTime[2], bool dir[2]) {
 		if(abs(n_steps[0]) - stepsDone[0] > 0 && micros() - timeStamp[0] >= stepTime[0]) {
 			oneStep(stepper0, &current_state[0], dir[0]);
 			++stepsDone[0];
-			if(dir[0] == CCW) {
-				++current_step[0];
-			} else if(dir[0] == CW){
-				--current_step[0];
-			}
       timeStamp[0] = micros();
 		}
 		if(abs(n_steps[1]) - stepsDone[1] > 0 && micros() - timeStamp[1] >= stepTime[1]) {
 			oneStep(stepper1, &current_state[1], dir[1]);
 			++stepsDone[1];		
-			if(dir[1] == CCW) {
-				++current_step[1];
-			} else if(dir[1] == CW) {
-				--current_step[1];
-			}
       timeStamp[1] = micros();
 		}		
 	}
