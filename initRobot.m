@@ -1,4 +1,4 @@
-function [s, theta0, theta1, x, y] = initRobot(port)
+function [s, robot] = initRobot(port)
 	
 	% Code for Octave/MATLAB compatibility
 
@@ -18,4 +18,6 @@ function [s, theta0, theta1, x, y] = initRobot(port)
 	theta1 = 0;
 	x = 320;
 	y = 0;
+	
+	robot = [theta0, theta1, x, y];
 end
