@@ -92,7 +92,7 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 			begin = time();
 			data = srl_read(serial, 1);
 
-			while(data ~= 'z' || time() - begin < 20)
+			while(data ~= 'z' || time() - begin < 10)
 				data = srl_read(serial, 1);
 			endwhile
 		else
