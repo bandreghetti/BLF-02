@@ -34,6 +34,15 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 		disp('ERROR: No negative speed values are allowed.')
 		validCommand = false;
 	endif
+	
+	if(sqrt(newX^2+newY^2) > 160 || sqrt((newX+80)^2+newY^2) < 80 || sqrt(newX^2+newY^2) < 40)
+		disp('ERROR: Destination point out of robot limits')
+		validCommand = false;
+	endif
+	
+	if()
+		disp('ERROR: Destination point out of robot limits
+	endif
 
 	% Code to check the direction of the movement
 	if(validCommand)
