@@ -38,14 +38,14 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 	% Code to check the direction of the movement
 	if(validCommand)
 		if(theta0 < 0)
-			neg0 = 0;
+			dir0 = 0;
 			theta0 = abs(theta0);
 		else
 			dir0 = 1;
 		endif
 
 		if(theta1 < 0)
-			neg1 = 1;
+			dir1 = 1;
 			theta1 = abs(theta1);
 		else
 			dir1 = 0;
