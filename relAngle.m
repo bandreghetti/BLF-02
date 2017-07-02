@@ -15,7 +15,7 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 
 	newTheta0 = robot(1) + theta0;
 	newTheta1 = robot(2) + theta1;
-	newX = 160 + 80*cos(newTheta0) + 80*cos(newTheta0 + newTheta1);
+	newX = 80*cos(newTheta0) + 80*cos(newTheta0 + newTheta1);
 	newY = 80*sin(newTheta0) + 80*sin(newTheta0 + newTheta1);
 
 	validCommand = true;

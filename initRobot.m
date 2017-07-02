@@ -16,7 +16,7 @@ function [s, robot] = initRobot(port)
 
 	theta0 = 0;
 	theta1 = 0;
-	x = 320;
+	x = -160;
 	y = 0;
 	
 	robot = [theta0, theta1, x, y];
