@@ -41,10 +41,10 @@ String getCommand() {
 
 void translateData(String data, int n_steps[2], long int stepTime[2], bool dir[2]) {
 	dir[0] = (bool)(data[0] - '0');
-	n_steps[0] = (data[1] - '0')*1000 + (data[2]  - '0')*100 + (data[3] - '0')*10 + data[4];
+	n_steps[0] = (data[1] - '0')*1000 + (data[2]  - '0')*100 + (data[3] - '0')*10 + (data[4] - '0');
 	stepTime[0] = (data[5] - '0')*100000 + (data[6] - '0')*10000 + (data[7] - '0')*1000 + (data[8] - '0')*100 + (data[9] - '0')*10 + (data[10] - '0');
 	dir[1] = (bool)(data[11] - '0');
-	n_steps[1] = (data[12] - '0')*1000 + (data[13]  - '0')*100 + (data[14] - '0')*10 + data[15];
+	n_steps[1] = (data[12] - '0')*1000 + (data[13]  - '0')*100 + (data[14] - '0')*10 + (data[15] - '0');
 	stepTime[1] = (data[16] - '0')*100000 + (data[17] - '0')*10000 + (data[18] - '0')*1000 + (data[19] - '0')*100 + (data[20] - '0')*10 + (data[21] - '0');
 }
 
