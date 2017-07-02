@@ -14,7 +14,7 @@ function [s, robot] = initRobot(port)
 	s = serial(port, 115200);
 	fopen(s);
 
-	theta0 = 0;
+	theta0 = 180;
 	theta1 = 0;
 	x = -160;
 	y = 0;
