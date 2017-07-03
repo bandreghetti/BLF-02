@@ -8,9 +8,9 @@ byte stepper1[] = {6, 7, 8, 9};
 byte current_state[] = {0, 0};
 
 void setup() {
-  Serial.begin(115200);
-  initStepper(stepper0);
-  initStepper(stepper1);
+	Serial.begin(115200);
+	initStepper(stepper0);
+	initStepper(stepper1);
 }
 
 void loop() {
@@ -21,11 +21,16 @@ void loop() {
 	String data = getCommand();
 	
 	if(isDigit(data[0])) {
-    translateData(data, n_steps, stepTime, dir);
-    moveSteppers(n_steps, stepTime, dir);
-    respondMaster();
+		translateData(data, n_steps, stepTime, dir);
+		moveSteppers(n_steps, stepTime, dir);
+		respondMaster();
 	} else {
-   
+		if(data[0] = 'p') {
+			data.remove(0, 1);
+			Serial.println(data);
+			translateData(data, n_steps, stepTime, dir);
+			smoothSteppers(n_steps, stepTime, dir);
+		}
 	}
 }
 
@@ -48,6 +53,59 @@ void translateData(String data, int n_steps[2], long int stepTime[2], bool dir[2
 	stepTime[1] = (data[16] - '0')*100000 + (data[17] - '0')*10000 + (data[18] - '0')*1000 + (data[19] - '0')*100 + (data[20] - '0')*10 + (data[21] - '0');
 }
 
+void smoothSteppers(int n_steps[2], long int stepTime[2], bool dir[2]) {
+	int stepsDone[2] = {0, 0};
+	long long int timeStamp[2] = {0, 0};	
+	
+	float t0 = n_steps[0]*stepTime[0];
+	float a0 = -2*n_steps[0]/(t0*t0*t0);
+	float b0 = 3*n_steps[0]/(t0*t0);	
+
+	float t1 = n_steps[1]*stepTime[1];
+	float a1 = -2*n_steps[1]/(t1*t1*t1);
+	float b1 = 3*n_steps[1]/(t1*t1);
+	
+	int npoints0 = n_steps[0]/8;
+	float dTime0 = t0/npoints0;
+	
+	int npoints1 = n_steps[1]/8;
+	float dTime1 = t1/npoints1;
+	
+	timeStamp[0] = micros();
+	timeStamp[1] = micros();
+	
+	int idx0 = 1; // Index for keeping track of changes in step period.
+	int idx1 = 1;
+	
+	long int period0 = dTime0/(theta(a0, b0, idx0*dTime0)-theta(a0, b0, (idx0-1)*dTime0));
+	long int period1 = dTime1/(theta(a1, b1, idx1*dTime1)-theta(a1, b1, (idx1-1)*dTime1));
+	
+	while(abs(n_steps[0] - stepsDone[0]) > 0 || abs(n_steps[1] - stepsDone[1]) > 0) {
+		if(abs(n_steps[0] - stepsDone[0]) > 0 && micros() - timeStamp[0] >= period0) {
+			oneStep(stepper0, &current_state[0], dir[0]);
+			++stepsDone[0];
+			timeStamp[0] = micros();
+		}
+		if(abs(n_steps[1] - stepsDone[1]) > 0 && micros() - timeStamp[1] >= period1) {
+			oneStep(stepper1, &current_state[1], dir[1]);
+			++stepsDone[1];	
+			timeStamp[1] = micros();
+		}
+		if(stepsDone[0] >= theta(a0, b0, idx0*dTime0)) {
+			++idx0;
+			period0 = dTime0/(theta(a0, b0, idx0*dTime0)-theta(a0, b0, (idx0-1)*dTime0));
+		}
+		if(stepsDone[1] >= theta(a1, b1, idx1*dTime1)) {
+			++idx1;
+			period1 = dTime1/(theta(a1, b1, idx1*dTime1)-theta(a1, b1, (idx1-1)*dTime1));
+		}
+	}
+}
+
+float theta(float a, float b, float t) {
+	return (a*t*t*t + b*t*t);
+}
+
 void moveSteppers(int n_steps[2], long int stepTime[2], bool dir[2]) {
 	int stepsDone[2] = {0, 0};
 	long long int timeStamp[2] = {0, 0};	
@@ -59,12 +117,12 @@ void moveSteppers(int n_steps[2], long int stepTime[2], bool dir[2]) {
 		if(abs(n_steps[0]) - stepsDone[0] > 0 && micros() - timeStamp[0] >= stepTime[0]) {
 			oneStep(stepper0, &current_state[0], dir[0]);
 			++stepsDone[0];
-      timeStamp[0] = micros();
+			timeStamp[0] = micros();
 		}
 		if(abs(n_steps[1]) - stepsDone[1] > 0 && micros() - timeStamp[1] >= stepTime[1]) {
 			oneStep(stepper1, &current_state[1], dir[1]);
 			++stepsDone[1];		
-      timeStamp[1] = micros();
+			timeStamp[1] = micros();
 		}		
 	}
 }
