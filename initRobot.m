@@ -2,6 +2,8 @@ function [s, robot] = initRobot(port)
 	
 	% Code for Octave/MATLAB compatibility
 
+	format bank
+	
 	octave = isOctave();
 	if(~octave)
 		delete(instrfindall);
