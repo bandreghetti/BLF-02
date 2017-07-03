@@ -18,6 +18,8 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 	newX = 80*cosd(newTheta0) + 80*cosd(newTheta0 + newTheta1);
 	newY = 80*sind(newTheta0) + 80*sind(newTheta0 + newTheta1);
 
+	newRobot = robot;
+	
 	validCommand = true;
 
 	if(newTheta0 < 0 || newTheta0 > 180)
@@ -36,12 +38,8 @@ function newRobot = relAngle(serial, robot, theta0, theta1, omega0 = 10, omega1 
 	endif
 	
 	if(sqrt(newX^2+newY^2) > 160 || sqrt((newX+80)^2+newY^2) < 80 || sqrt(newX^2+newY^2) < 40)
-		disp('ERROR: Destination point out of robot limits')
+		disp('ERROR: Destination point out of robot work area')
 		validCommand = false;
-	endif
-	
-	if()
-		disp('ERROR: Destination point out of robot limits
 	endif
 
 	% Code to check the direction of the movement
