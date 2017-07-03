@@ -9,9 +9,9 @@ function newRobot = absAngle(serial, robot, theta0, theta1, omega0, omega1)
 	% omega1: the speed at which the first motor will execute the move (in degrees per second)
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	relTheta0 = theta0 - robot[1]
-	relTheta1 = theta1 - robot[2]
+	relTheta0 = theta0 - robot(1);
+	relTheta1 = theta1 - robot(2);
 	
-	newRobot = relAngle(serial, robot, relTheta0, relTheta1, omega0, omega1)
+	newRobot = relAngle(serial, robot, relTheta0, relTheta1, omega0, omega1, :);
 
 end
