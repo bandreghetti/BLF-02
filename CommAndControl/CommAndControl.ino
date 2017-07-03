@@ -25,7 +25,7 @@ void loop() {
 		moveSteppers(n_steps, stepTime, dir);
 		respondMaster();
 	} else {
-		if(data[0] = 'p') {
+		if(data[0] == 'p') {
 			data.remove(0, 1);
 			Serial.println(data);
 			translateData(data, n_steps, stepTime, dir);
