@@ -30,6 +30,7 @@ void loop() {
 			Serial.println(data);
 			translateData(data, n_steps, stepTime, dir);
 			smoothSteppers(n_steps, stepTime, dir);
+			respondMaster();
 		}
 	}
 }
