@@ -34,10 +34,10 @@ function newRobot = Phase3(serial, robot, x, y)
 	if(validCommand && (deltatheta0 ~= 0 || deltatheta1 ~= 0))	
 		if(deltatheta0 < deltatheta1)
 			omega1 = omega;
-			omega0 = (deltatheta0*omega1)/deltatheta1;
+			omega0 = abs((deltatheta0*omega1)/deltatheta1);
 		else
 			omega0 = omega;
-			omega1 = (deltatheta1*omega0)/deltatheta0;
+			omega1 = abs((deltatheta1*omega0)/deltatheta0);
 		end
 		newRobot = absAngleSmooth(serial, newRobot, theta0f, theta1f, omega0, omega1);
 	end
