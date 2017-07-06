@@ -66,7 +66,7 @@ function newRobot = Phase4(serial, robot, xf, yf)
 				omega0 = omega;
 				omega1 = abs((deltatheta1*omega0)/deltatheta0);
 			end
-			newRobot = absAngleSmooth(serial, newRobot, theta0f, theta1f, omega0, omega1);
+			newRobot = absAngle(serial, newRobot, theta0f, theta1f, omega0, omega1);
 		end
 	endfor
 endfunction
