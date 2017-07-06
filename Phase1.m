@@ -1,4 +1,4 @@
-function newRobot = Phase1(serial, robot, x, y, omega0 = 15, omega1 = 15)
+function newRobot = Phase1(serial, robot, x, y, omega0 = 20, omega1 = 20)
 	[theta0f, theta1f] = calcAngles(x, y);
 	theta0i = robot(1);
 	theta1i = robot(2);
