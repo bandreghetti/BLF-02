@@ -39,26 +39,12 @@ void loop() {
 			translateData(data, n_steps, stepTime, dir);
 			smoothSteppers(n_steps, stepTime, dir);
 			respondMaster();
-		} else if (command == 's') {
+		}/* else if (command == 's') {
 			Serial.println(data);
 			translateLineData(data, initial_theta, final_theta, &total_time);
-			//s090000450000000045009900000
-			/*
-			Serial.print("initial_theta[0]: ");
-      Serial.println(initial_theta[0]);
-      Serial.print("final_theta[0]: ");
-      Serial.println(final_theta[0]);
-      Serial.print("initial_theta[1]: ");
-      Serial.println(initial_theta[1]);
-      Serial.print("final_theta[1]: ");
-      Serial.println(final_theta[1]);
-      Serial.print("total_time: ");
-      Serial.println(total_time);
-      Serial.print('\n');
-			*/
 			straightLine(initial_theta, final_theta, total_time);
       respondMaster();
-		}
+		}*/
 	}
 }
 
@@ -70,8 +56,7 @@ String getCommand() {
 	} else {
 		return "f";
 	}
-}
-
+}/*
 void straightLine(float initial_theta[2], float final_theta[2], long int total_time) {
 	float initial_x = 80*cos(RADIANS_PER_DEGREE*initial_theta[0]) + 80*cos(RADIANS_PER_DEGREE*(initial_theta[0] + initial_theta[1]));
 	float initial_y = 80*sin(RADIANS_PER_DEGREE*initial_theta[0]) + 80*sin(RADIANS_PER_DEGREE*(initial_theta[0] + initial_theta[1]));
@@ -167,7 +152,7 @@ void straightLine(float initial_theta[2], float final_theta[2], long int total_t
 		moveSteppers(n_steps, stepTime, dir);
 	}
 }
-
+*/
 void translateData(String data, int n_steps[2], long int stepTime[2], bool dir[2]) {
 	dir[0] = (bool)(data[0] - '0');
 	n_steps[0] = (data[1] - '0')*1000 + (data[2]  - '0')*100 + (data[3] - '0')*10 + (data[4] - '0');
