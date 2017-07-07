@@ -46,7 +46,7 @@ function newRobot = Phase4(serial, robot, xf, yf)
 	
 	Distances = sqrt(X.^2+Y.^2);
 	
-	if(sum(Distances > 160) > 0 || sum(sqrt((X-80).^2+Y.^2) < 80) > 0 || sum(Distances < 40) > 0)
+	if(sum(Distances > 160) > 0 || sum(sqrt((X+80).^2+Y.^2) < 80) > 0 || sum(Distances < 40) > 0)
 		printf('ERROR: Unable to draw straight line from (%.2f, %.2f) to (%.2f, %.2f)\n', xi, yi, xf, yf)
 		validCommand = false;
 	endif
@@ -55,8 +55,8 @@ function newRobot = Phase4(serial, robot, xf, yf)
 		[theta0f, theta1f] = calcAngles(X(i), Y(i));
 		theta0i = newRobot(1);
 		theta1i = newRobot(2);
-		deltatheta0 = theta0f - theta0i;
-		deltatheta1 = theta1f - theta1i;
+		deltatheta0 = abs(theta0f - theta0i);
+		deltatheta1 = abs(theta1f - theta1i);
 		
 		if(validCommand && (deltatheta0 ~= 0 || deltatheta1 ~= 0))	
 			if(deltatheta0 < deltatheta1)
